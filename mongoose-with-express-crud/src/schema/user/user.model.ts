@@ -30,7 +30,7 @@ export interface Address {
   zip: number;
 }
 
-export interface UserEntity {
+export interface User {
   _id?: string;
   credentials: UserCredentials;
   employeeDetails: UserEmployeeDetails;

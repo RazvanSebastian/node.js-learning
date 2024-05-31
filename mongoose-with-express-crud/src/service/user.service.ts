@@ -4,13 +4,13 @@ import { UserModel } from '../schema/user/user.schema';
 import { hash } from 'bcrypt';
 import { ErrorCode } from '../errors/base.error';
 import { BadRequestError, NotFoundError } from '../errors/generic.error';
-import { UserEntity } from '../schema/user/user.model';
+import { User } from '../schema/user/user.model';
 import { UserUpdates, mapToMongooseInc } from './model/user.model';
 
 class UserService {
   private UserModel = UserModel;
 
-  public async createUser(user: UserEntity): Promise<UserEntity> {
+  public async createUser(user: User): Promise<User> {
     const hashedPassword = await hash(user.credentials.password, 10);
     return doInTransaction(async (session: ClientSession) => {
       const newUser = new this.UserModel({
@@ -58,7 +58,7 @@ class UserService {
     });
   }
 
-  public async getUser(id: string): Promise<UserEntity> {
+  public async getUser(id: string): Promise<User> {
     return doInTransaction(async (session: ClientSession) => {
       const result = await this.UserModel.findById(
         id,

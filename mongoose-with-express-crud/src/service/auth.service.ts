@@ -5,7 +5,7 @@ import { doInTransaction } from '../core/transactional';
 import { UserModel } from '../schema/user/user.schema';
 import { ErrorCode } from '../errors/base.error';
 import { AuthenticationError } from '../errors/generic.error';
-import { UserEntity } from '../schema/user/user.model';
+import { User } from '../schema/user/user.model';
 
 export class AuthService {
   private UserModel = UserModel;
@@ -42,7 +42,7 @@ export class AuthService {
     return await compare(password, hash);
   }
 
-  private async findUser(username: string): Promise<UserEntity> {
+  private async findUser(username: string): Promise<User> {
     return await doInTransaction(async (session: ClientSession) => {
       const result = await this.UserModel.findOne(
         {

@@ -28,7 +28,7 @@ export class NotFoundError extends CustomError {
   }
 }
 
-export class UnprocessableContent extends CustomError {
+export class UnprocessableContentError extends CustomError {
   readonly status = 422;
   constructor(message: string, errorCode: ErrorCode) {
     super(message, errorCode);
