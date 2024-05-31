@@ -16,11 +16,7 @@ export class AuthService {
       user &&
       (await this.verifyPasswordsMatching(password, user.credentials.password));
     if (isUserValid) {
-      return this.buildJwt(
-        user._id,
-        user.credentials.username,
-        user.employeeDetails.role
-      );
+      return this.buildJwt(user._id, user.credentials.username);
     } else {
       throw new AuthenticationError(
         'Invalid username or password',
@@ -29,7 +25,7 @@ export class AuthService {
     }
   }
 
-  private buildJwt(id: string, username: string, role: string) {
+  private buildJwt(id: string, username: string) {
     return JWT.sign({ username }, SECRET_KEY, {
       expiresIn: '1d',
       algorithm: 'HS256',
@@ -52,7 +48,6 @@ export class AuthService {
           '_id': 1,
           'credentials.username': 1,
           'credentials.password': 1,
-          'employeeDetails.role': 1,
         },
         { session }
       ).exec();

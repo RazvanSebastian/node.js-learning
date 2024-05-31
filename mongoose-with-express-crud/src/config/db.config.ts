@@ -1,7 +1,8 @@
 import mongoose, { Connection } from 'mongoose';
 import { UserModel } from '../schema/user/user.schema';
+import { RoleModel } from '../schema/role/roel.schema';
 
-const models = [UserModel];
+const models = [UserModel, RoleModel];
 
 const createCollections = async () => {
   await Promise.all(models.map((model) => model.createCollection()));

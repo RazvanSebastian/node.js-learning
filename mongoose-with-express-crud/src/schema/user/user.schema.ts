@@ -1,18 +1,17 @@
-import mongoose, { Document, Error, Schema } from 'mongoose';
+import { NextFunction } from 'express';
+import mongoose, { Document, Schema } from 'mongoose';
+import { ErrorCode } from '../../errors/base.error';
+import {
+  BadRequestError,
+  UnprocessableContentError,
+} from '../../errors/generic.error';
 import {
   Address,
-  Role,
   User,
   UserCredentials,
   UserEmployeeDetails,
   UserPersonalDetails,
 } from './user.model';
-import {
-  BadRequestError,
-  UnprocessableContentError,
-} from '../../errors/generic.error';
-import { ErrorCode } from '../../errors/base.error';
-import { NextFunction } from 'express';
 
 const userAddressSchema = new Schema<Address>({
   street: { type: String, required: true },
@@ -32,7 +31,6 @@ const employeeDetailsSchema = new Schema<UserEmployeeDetails>({
   department: { type: String, required: true },
   salary: { type: Number, required: true, min: 1 },
   hireDate: { type: Date, required: true },
-  role: { type: String, enum: Object.values(Role), required: true },
 });
 
 const userCredentialsSchema = new Schema<UserCredentials>({
@@ -54,6 +52,7 @@ const userCredentialsSchema = new Schema<UserCredentials>({
 });
 
 const userSchema = new Schema<User>({
+  role: { type: Schema.Types.ObjectId, ref: 'Role' },
   credentials: userCredentialsSchema,
   employeeDetails: employeeDetailsSchema,
   personalDetails: personalDetailsSchema,

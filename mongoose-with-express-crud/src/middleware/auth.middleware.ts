@@ -7,6 +7,7 @@ import {
   AuthorizationError,
 } from '../errors/generic.error';
 import { RequestWithUserAuth } from '../interfaces/auth.interfaces';
+import { Role } from '../schema/role/role.model';
 import { UserModel } from '../schema/user/user.schema';
 
 export const preAuthorize = (allowedRoles: string[] = []) => {
@@ -20,14 +21,14 @@ export const preAuthorize = (allowedRoles: string[] = []) => {
       if (jwt === undefined) {
         next(
           new AuthenticationError(
-            "Authorization header doesn't contain JWT",
+            'JWT not present in cookies',
             ErrorCode.INVALID_CREDENTIALS
           )
         );
         return;
       }
       const jwtPayload = JWT.verify(jwt, SECRET_KEY) as JwtPayload;
-      const user = await UserModel.findById(jwtPayload.sub);
+      const user = await findUser(jwtPayload.sub);
       if (user === null) {
         next(
           new AuthenticationError(
@@ -37,10 +38,7 @@ export const preAuthorize = (allowedRoles: string[] = []) => {
         );
         return;
       }
-      if (
-        allowedRoles.length > 0 &&
-        !allowedRoles.includes(user.employeeDetails.role)
-      ) {
+      if (allowedRoles.length > 0 && !allowedRoles.includes(user.role.name)) {
         next(
           new AuthorizationError(
             "Don't have enough rights",
@@ -52,7 +50,7 @@ export const preAuthorize = (allowedRoles: string[] = []) => {
       req.user = {
         id: user.id,
         username: user.credentials.username,
-        role: user.employeeDetails.role,
+        role: user.role.name,
       };
       next();
     } catch (error) {
@@ -61,4 +59,9 @@ export const preAuthorize = (allowedRoles: string[] = []) => {
       );
     }
   };
+};
+
+const findUser = async (id: string) => {
+  let user = await UserModel.findById(id);
+  return await user.populate<{ role: Role }>('role');
 };

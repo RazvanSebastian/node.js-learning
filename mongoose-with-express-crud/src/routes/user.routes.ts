@@ -2,7 +2,7 @@ import { Router } from 'express';
 import UserController from '../controller/user.controller';
 import { Routes } from '../interfaces/routes.interfaces';
 import { preAuthorize } from '../middleware/auth.middleware';
-import { Role } from '../schema/user/user.model';
+import { RoleEnum } from '../schema/role/role.model';
 
 class UserRoutes implements Routes {
   private readonly BASE_PATH = '/users';
@@ -26,9 +26,9 @@ class UserRoutes implements Routes {
     );
     this._router
       .route(`${this.BASE_PATH}/user/:id`)
-      .get(preAuthorize([Role.ADMIN]), this.userController.getUser)
+      .get(preAuthorize([RoleEnum.ADMIN]), this.userController.getUser)
       .put(preAuthorize(), this.userController.updateUser)
-      .delete(preAuthorize([Role.ADMIN]), this.userController.deleteUser);
+      .delete(preAuthorize([RoleEnum.ADMIN]), this.userController.deleteUser);
   }
 }
 

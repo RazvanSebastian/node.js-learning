@@ -1,8 +1,5 @@
-export enum Role {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  EMPLOYEE = 'employee',
-}
+import { Document, ObjectId, PopulatedDoc, Types } from 'mongoose';
+import { Role } from '../role/role.model';
 
 export interface UserCredentials {
   username: string;
@@ -13,7 +10,6 @@ export interface UserEmployeeDetails {
   department: string;
   salary: number;
   hireDate: Date;
-  role: Role;
 }
 
 export interface UserPersonalDetails {
@@ -32,6 +28,7 @@ export interface Address {
 
 export interface User {
   _id?: string;
+  role: Types.ObjectId;
   credentials: UserCredentials;
   employeeDetails: UserEmployeeDetails;
   personalDetails: UserPersonalDetails;

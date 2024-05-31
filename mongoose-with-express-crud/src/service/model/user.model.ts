@@ -1,9 +1,9 @@
-import { Address, Role } from '../../schema/user/user.model';
+import { Types } from 'mongoose';
 
 export interface UserUpdates {
   department?: string;
   salary?: number;
-  role?: Role;
+  role?: Types.ObjectId;
   street?: string;
   city?: string;
   zip?: number;
