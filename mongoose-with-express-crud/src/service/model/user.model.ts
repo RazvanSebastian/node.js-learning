@@ -1,4 +1,11 @@
 import { Types } from 'mongoose';
+import {
+  UserCredentials,
+  UserEmployeeDetails,
+  UserPersonalDetails,
+} from '../../schema/user/user.model';
+import { Role } from '../../schema/role/role.model';
+import { Project } from '../../schema/project/project.model';
 
 export interface UserUpdates {
   department?: string;
@@ -7,6 +14,15 @@ export interface UserUpdates {
   street?: string;
   city?: string;
   zip?: number;
+}
+
+export interface UserDetails {
+  _id?: string;
+  credentials: UserCredentials;
+  employeeDetails: UserEmployeeDetails;
+  personalDetails: UserPersonalDetails;
+  role: Role;
+  projects: Project[];
 }
 
 export const mapToMongooseInc = (userUpdates: UserUpdates) => ({

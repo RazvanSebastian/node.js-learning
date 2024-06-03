@@ -62,6 +62,5 @@ export const preAuthorize = (allowedRoles: string[] = []) => {
 };
 
 const findUser = async (id: string) => {
-  let user = await UserModel.findById(id);
-  return await user.populate<{ role: Role }>('role');
+  return await UserModel.findById(id).populate<{ role: Role }>('role').exec();
 };

@@ -52,10 +52,11 @@ const userCredentialsSchema = new Schema<UserCredentials>({
 });
 
 const userSchema = new Schema<User>({
-  role: { type: Schema.Types.ObjectId, ref: 'Role' },
   credentials: userCredentialsSchema,
   employeeDetails: employeeDetailsSchema,
   personalDetails: personalDetailsSchema,
+  role: { type: Schema.Types.ObjectId, ref: 'Role' },
+  projects: [{ type: Schema.Types.ObjectId, ref: 'Project' }],
 }).post('save', function (error, doc: Document, next: NextFunction) {
   if (error.name === 'MongoServerError' && error.code === 11000) {
     next(

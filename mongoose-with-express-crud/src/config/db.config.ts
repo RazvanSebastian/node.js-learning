@@ -1,6 +1,6 @@
 import mongoose, { Connection } from 'mongoose';
 import { UserModel } from '../schema/user/user.schema';
-import { RoleModel } from '../schema/role/roel.schema';
+import { RoleModel } from '../schema/role/role.schema';
 
 const models = [UserModel, RoleModel];
 

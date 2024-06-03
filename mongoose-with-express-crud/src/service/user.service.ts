@@ -1,11 +1,13 @@
+import { hash } from 'bcrypt';
 import { ClientSession } from 'mongoose';
 import { doInTransaction } from '../core/transactional';
-import { UserModel } from '../schema/user/user.schema';
-import { hash } from 'bcrypt';
 import { ErrorCode } from '../errors/base.error';
 import { BadRequestError, NotFoundError } from '../errors/generic.error';
 import { User } from '../schema/user/user.model';
+import { UserModel } from '../schema/user/user.schema';
 import { UserUpdates, mapToMongooseInc } from './model/user.model';
+import { Role } from '../schema/role/role.model';
+import { Project } from '../schema/project/project.model';
 
 class UserService {
   private UserModel = UserModel;
@@ -58,13 +60,17 @@ class UserService {
     });
   }
 
-  public async getUser(id: string): Promise<User> {
-    return doInTransaction(async (session: ClientSession) => {
+  public async getUser(id: string) {
+    return await doInTransaction(async (session: ClientSession) => {
       const result = await this.UserModel.findById(
         id,
         { 'credentials.password': 0 },
         { session }
-      ).lean();
+      )
+        .populate<{ role: Role }>('role')
+        .populate<{ projects: Project[] }>('projects')
+        .lean()
+        .exec();
       return result;
     });
   }

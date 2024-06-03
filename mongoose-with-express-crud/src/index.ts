@@ -5,12 +5,13 @@ import { Routes } from './interfaces/routes.interfaces';
 import { errorHandler } from './middleware/error-handler.middleware';
 import AuthRoutes from './routes/auth.routes';
 import UserRoutes from './routes/user.routes';
-import { RoleModel } from './schema/role/roel.schema';
+import { RoleModel } from './schema/role/role.schema';
 import { RoleEnum } from './schema/role/role.model';
 import { doInTransaction } from './core/transactional';
 import { ClientSession } from 'mongoose';
+import ProjectRoutes from './routes/project.routes';
 
-const ROUTES = [new UserRoutes(), new AuthRoutes()];
+const ROUTES = [new UserRoutes(), new AuthRoutes(), new ProjectRoutes()];
 
 class MainApp {
   public app: Application;

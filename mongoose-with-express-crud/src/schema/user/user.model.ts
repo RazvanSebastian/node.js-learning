@@ -1,5 +1,4 @@
-import { Document, ObjectId, PopulatedDoc, Types } from 'mongoose';
-import { Role } from '../role/role.model';
+import { Types } from 'mongoose';
 
 export interface UserCredentials {
   username: string;
@@ -28,8 +27,10 @@ export interface Address {
 
 export interface User {
   _id?: string;
-  role: Types.ObjectId;
   credentials: UserCredentials;
   employeeDetails: UserEmployeeDetails;
   personalDetails: UserPersonalDetails;
+  // Relationships
+  role: Types.ObjectId;
+  projects: [Types.ObjectId];
 }
