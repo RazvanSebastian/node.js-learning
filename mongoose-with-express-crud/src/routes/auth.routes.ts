@@ -16,11 +16,10 @@ class AuthRoutes implements Routes {
   }
 
   private initializeRoutes() {
-    this._router.post(
-      `${this.BASE_PATH}/login`,
-      this.authController.authenticate
+    this._router.post(`${this.BASE_PATH}/login`, (req, res, next) =>
+      this.authController.authenticate(req, res, next)
     );
   }
 }
 
-export default AuthRoutes;
+export default new AuthRoutes().router;

@@ -1,26 +1,21 @@
 import cookieParser from 'cookie-parser';
 import express, { Application } from 'express';
 import openDbConnection from './config/db.config';
-import { Routes } from './interfaces/routes.interfaces';
 import { errorHandler } from './middleware/error-handler.middleware';
-import AuthRoutes from './routes/auth.routes';
-import UserRoutes from './routes/user.routes';
-import { RoleModel } from './schema/role/role.schema';
-import { RoleEnum } from './schema/role/role.model';
-import { doInTransaction } from './core/transactional';
 import { ClientSession } from 'mongoose';
-import ProjectRoutes from './routes/project.routes';
-
-const ROUTES = [new UserRoutes(), new AuthRoutes(), new ProjectRoutes()];
+import { doInTransaction } from './core/transactional';
+import AppRoutes from './routes';
+import { RoleEnum } from './schema/role/role.model';
+import { RoleModel } from './schema/role/role.schema';
 
 class MainApp {
   public app: Application;
 
-  constructor(routes: Routes[]) {
+  constructor() {
     this.app = express();
     this.initializeDb();
     this.initializeMiddlewares();
-    this.initializeRoutes(routes);
+    this.initializeRoutes();
     this.initializeErrorHandler();
   }
 
@@ -30,8 +25,9 @@ class MainApp {
     });
   }
 
-  private initializeRoutes(routes: Routes[]) {
-    routes.forEach((routes) => this.app.use('/', routes.router));
+  private initializeRoutes() {
+    const appRoutes = new AppRoutes(this.app);
+    appRoutes.initializeRoutes();
   }
 
   private initializeErrorHandler() {
@@ -64,5 +60,5 @@ class MainApp {
   }
 }
 
-const mainApp = new MainApp(ROUTES);
+const mainApp = new MainApp();
 mainApp.start();
